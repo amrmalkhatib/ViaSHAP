@@ -5,6 +5,7 @@ from torch.nn.parameter import Parameter
 import numpy as np
 from fastshap.utils import ShapleySampler
 from ekan import KAN as kan
+from fastkan import FastKAN as fkan
 import math
 import os
 from tqdm import tqdm
@@ -209,15 +210,17 @@ def normalize_adj_matrix(adj):
 
 
 class KANSHAP(nn.Module):
-    def __init__(self, num_features, num_classes, index_to_name, dataframe, categorical, numerical):
+    def __init__(self, num_features, num_classes, index_to_name, dataframe, categorical, numerical, kan_type="ekan"):
         super(KANSHAP, self).__init__()
 
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         self.embedding = Embed(dataframe, categorical, numerical, 32)
 
-        self.f1 = kan([len(categorical)*32 + len(numerical), 64, 128, 64, num_features * num_classes], grid_size=5, spline_order=3)
-
+        if kan_type == "ekan":
+            self.f1 = kan([len(categorical)*32 + len(numerical), 64, 128, 64, num_features * num_classes], grid_size=5, spline_order=3)
+        elif kan_type == "fkan":
+            self.f1 = fkan([len(categorical)*32 + len(numerical), 64, 128, 64, num_features * num_classes], grid_num=6)
         #self.f2 = kan([128, 64, num_features], grid_size=5, spline_order=3)
 
         self.num_classes = num_classes
