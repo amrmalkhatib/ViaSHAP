@@ -9,7 +9,7 @@ import gc
 from sklearn.metrics import roc_auc_score, precision_score, recall_score, f1_score
 
 
-#  THE FOLLOWING UNET CODE IS NOT MINE, IT IS FROM https://github.com/iancovert/fastshap/blob/main/notebooks/unet.py and should be checked/credited
+#  THE FOLLOWING UNET PART OF THE CODE IS NOT MINE, IT IS FROM https://github.com/iancovert/fastshap/blob/main/notebooks/unet.py and should be checked/credited
 class MultiConv(nn.Module):
     '''(convolution => [BN] => ReLU) * n'''
 

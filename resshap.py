@@ -9,7 +9,7 @@ from sklearn.metrics import roc_auc_score, precision_score, recall_score, f1_sco
 import gc
 
 
-#  THE FOLLOWING RESNET CODE IS NOT MINE, IT IS FROM https://github.com/kuangliu/pytorch-cifar/blob/master/models/resnet.py and should be checked/credited
+#  THE FOLLOWING RESNET PART OF THE CODE IS NOT MINE, IT IS FROM https://github.com/kuangliu/pytorch-cifar/blob/master/models/resnet.py and should be checked/credited
 class BasicBlock(nn.Module):
     expansion = 1
 
