@@ -21,4 +21,5 @@ tqdm==4.60.0
 openml==0.14.1
 matplotlib==3.4.1
 matplotlib-inline==0.1.2
+fastshap-torch==0.0.1
 "fastkan @ git+https://github.com/ZiyaoLi/fast-kan@17b6540"
