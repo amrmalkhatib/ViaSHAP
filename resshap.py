@@ -79,7 +79,7 @@ class OutConv(nn.Module):
 
 
 class ResNet(nn.Module):
-    def __init__(self, block, num_blocks, num_classes, num_features, in_channels):
+    def __init__(self, block, num_blocks, num_classes, superpixel_size, in_channels):
         super(ResNet, self).__init__()
 
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -101,13 +101,13 @@ class ResNet(nn.Module):
             stride = 1
 
         num = num_blocks[-1]
-        blocks.append(self._make_layer(block, channels, num, stride=2))
+        blocks.append(self._make_layer(block, channels, num, stride=superpixel_size))
 
         self.layers = nn.ModuleList(blocks)
 
         # Output layer.
         self.num_classes = num_classes
-        self.num_features = num_features
+
         if num_classes is not None:
 
             self.outc = OutConv(512*block.expansion, num_classes)
@@ -151,16 +151,16 @@ class ResNet(nn.Module):
         return self.forward(x_in)
 
 
-def ResNet18(num_classes, num_features, in_channels=3):
-    return ResNet(BasicBlock, [2, 2, 2, 2], num_classes, num_features, in_channels)
+def ResNet18(num_classes, superpixel_size, in_channels=3):
+    return ResNet(BasicBlock, [2, 2, 2, 2], num_classes, superpixel_size, in_channels)
 
 
-def ResNet34(num_classes, num_features, in_channels=3):
-    return ResNet(BasicBlock, [3, 4, 6, 3], num_classes, num_features, in_channels)
+def ResNet34(num_classes, superpixel_size, in_channels=3):
+    return ResNet(BasicBlock, [3, 4, 6, 3], num_classes, superpixel_size, in_channels)
 
 
-def ResNet50(num_classes, num_features, in_channels=3):
-    return ResNet(Bottleneck, [3, 4, 6, 3], num_classes, num_features, in_channels)
+def ResNet50(num_classes, superpixel_size, in_channels=3):
+    return ResNet(Bottleneck, [3, 4, 6, 3], num_classes, superpixel_size, in_channels)
 
 
 class EarlyStopping:
@@ -215,7 +215,7 @@ def train_model(width, height, superpixel_size, train_dataloader,
 
     if resnet_model is None:
 
-        resnet_model = ResNet18(num_classes, num_features).to(device)
+        resnet_model = ResNet18(num_classes, superpixel_size).to(device)
 
     if optimizer_train is None:
         optimizer_train = torch.optim.Adam(resnet_model.parameters(), lr=learning_rate)
